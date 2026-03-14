@@ -96,4 +96,3 @@ export const createStyles = (theme: Theme) =>
       color: theme.colors.text,
     },
   });
-

@@ -5,6 +5,7 @@ import { useTheme } from '../../global/themes';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../routes';
+import { LogOut } from 'lucide-react-native';
 
 type PokemonListItem = {
   id: number;
@@ -39,12 +40,21 @@ export default function PokemonListScreen() {
   const styles = createStyles(theme);
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList, 'PokemonList'>>();
 
+  const handleLogout = () => {
+    // Integração de autenticação será adicionada futuramente
+    console.log('Saindo...');
+    navigation.reset({
+      index: 0,
+      routes: [{name: "Login"}],
+    })
+  };
+
   const renderItem = ({ item }: { item: PokemonListItem }) => (
-    <TouchableOpacity 
-      style={styles.card} 
-      activeOpacity={0.8} 
-      onPress={() => navigation.navigate('PokemonDetail', { id: item.id})}
-    >
+      <TouchableOpacity 
+        style={styles.card} 
+        activeOpacity={0.8} 
+        onPress={() => navigation.navigate('PokemonDetail', { id: item.id})}
+      >
       <View style={styles.cardLeft}>
         <Text style={styles.cardName}>{item.name}</Text>
         <View style={styles.typeContainer}>
@@ -61,7 +71,14 @@ export default function PokemonListScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.headerTitle}>Pokédex</Text>
+      <View style={styles.flex} >
+        <Text style={styles.headerTitle}>Pokédex</Text>
+        <TouchableOpacity style={styles.buttonSair} onPress={handleLogout}>
+          <Text style={styles.buttonSairText}>
+            <LogOut/>
+          </Text>
+        </TouchableOpacity>
+      </View>
       <FlatList
         data={MOCK_POKEMON_LIST}
         keyExtractor={(item) => String(item.id)}
@@ -71,4 +88,3 @@ export default function PokemonListScreen() {
     </View>
   );
 };
-

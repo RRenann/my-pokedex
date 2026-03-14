@@ -70,4 +70,3 @@ export async function fetchPokemonDetail(
 
   return response.json();
 }
-

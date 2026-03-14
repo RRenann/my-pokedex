@@ -77,4 +77,3 @@ export const createStyles = (theme: Theme) =>
       fontWeight: 'bold',
     },
   });
-

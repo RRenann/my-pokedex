@@ -10,9 +10,6 @@ export const createStyles = (theme: Theme) =>
     headerTitle: {
       fontSize: 28,
       fontWeight: 'bold',
-      paddingHorizontal: 24,
-      paddingTop: 60,
-      paddingBottom: 16,
       color: theme.colors.text,
     },
     listContent: {
@@ -65,5 +62,27 @@ export const createStyles = (theme: Theme) =>
       width: 72,
       height: 72,
     },
+    buttonSair: {
+      width: 50,
+      height: 50,
+      alignItems: 'center',
+      justifyContent: 'center',
+      backgroundColor: 'red',
+      borderRadius: 40,
+      borderWidth: 1,
+      borderColor: theme.colors.primaryDark,
+    },
+    buttonSairText: {
+      color: theme.colors.text,
+      fontWeight: 'bold',
+    },
+    flex: {
+      display: "flex",
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "space-between",
+      paddingHorizontal: 24,
+      paddingTop: 60,
+      paddingBottom: 32,
+    },
   });
-
