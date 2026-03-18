@@ -44,6 +44,11 @@ export const themes = {
   dark: darkTheme,
 };
 
+/**
+ * Hook personalizado que retorna o tema atual baseado no esquema de cores do dispositivo.
+ * Retorna o tema claro ou escuro.
+ * Por que é usada: Para fornecer o tema da aplicação dinamicamente com base nas preferências do usuário.
+ */
 export function useTheme(): Theme {
   const scheme = useColorScheme();
   return scheme === 'dark' ? themes.dark : themes.light;

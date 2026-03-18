@@ -12,6 +12,11 @@ export type RootStackParamList = {
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
+/**
+ * Componente que define o navegador de pilha da aplicação.
+ * Configura as rotas para Login, PokemonList e PokemonDetail.
+ * Por que é usada: Para gerenciar a navegação entre as telas da aplicação.
+ */
 export default function AppNavigator() {
     return (
         <Stack.Navigator 

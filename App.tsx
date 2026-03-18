@@ -7,6 +7,11 @@ import PokemonDetailScreen from './src/pages/PokemonDetail';
 import AppNavigator from './src/routes';
 import { NavigationContainer } from '@react-navigation/native';
 
+/**
+ * Componente principal da aplicação.
+ * Configura o container de navegação e o status bar.
+ * Por que é usada: Para inicializar e renderizar a estrutura base da aplicação React Native.
+ */
 export default function App() {
   return (
     <NavigationContainer>

@@ -14,6 +14,13 @@ export type PokemonListResponse = {
   }[];
 };
 
+/**
+ * Função assíncrona que busca a lista de Pokémons da API.
+ * @param limit Número máximo de Pokémons a buscar (padrão 20).
+ * @param offset Deslocamento para paginação (padrão 0).
+ * @param options Opções adicionais como sinal de abortar.
+ * Por que é usada: Para obter uma lista paginada de Pokémons da PokeAPI.
+ */
 export async function fetchPokemonList(
   limit = 20,
   offset = 0,
@@ -57,6 +64,12 @@ export type PokemonDetailResponse = {
   }[];
 };
 
+/**
+ * Função assíncrona que busca os detalhes de um Pokémon específico.
+ * @param nameOrId Nome ou ID do Pokémon.
+ * @param options Opções adicionais como sinal de abortar.
+ * Por que é usada: Para obter informações detalhadas de um Pokémon da PokeAPI.
+ */
 export async function fetchPokemonDetail(
   nameOrId: string | number,
   options?: FetchOptions,

@@ -1,6 +1,11 @@
 import { StyleSheet } from 'react-native';
 import type { Theme } from '../../global/themes';
 
+/**
+ * Função que cria os estilos da tela de lista de Pokémons.
+ * @param theme O tema atual da aplicação.
+ * Por que é usada: Para definir os estilos responsivos baseados no tema, garantindo consistência visual.
+ */
 export const createStyles = (theme: Theme) =>
   StyleSheet.create({
     container: {
