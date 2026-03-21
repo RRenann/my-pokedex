@@ -58,6 +58,27 @@ export const createStyles = (theme: Theme) =>
       height: 160,
       marginTop: 16,
     },
+    imageContainer: {
+      width: '100%',
+      marginTop: 16,
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    arrowButton: {
+      width: 40,
+      height: 40,
+      borderRadius: 20,
+      backgroundColor: theme.colors.accent,
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginHorizontal: 12,
+    },
+    arrowText: {
+      color: theme.colors.text,
+      fontSize: 20,
+      fontWeight: '700',
+    },
     section: {
       marginBottom: 20,
     },

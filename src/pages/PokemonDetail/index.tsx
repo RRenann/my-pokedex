@@ -41,6 +41,8 @@ export default function PokemonDetailScreen() {
   const { id } = route.params;
 
   const [pokemon, setPokemon] = useState<PokemonDetailResponse | null>(null);
+  const [images, setImages] = useState<string[]>([]);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [description, setDescription] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -82,6 +84,29 @@ export default function PokemonDetailScreen() {
 
           setPokemon(detail);
           setDescription(getPokemonDescriptionFromSpecies(species));
+          // Extrair apenas os sprites "padrão" (não shiny), e preferir ordem front -> female(if any) -> back
+          const preferredKeys = [
+            'front_default',
+            'front_female',
+            'back_default',
+            'back_female',
+          ];
+
+          const collected: string[] = [];
+          preferredKeys.forEach((k) => {
+            // @ts-ignore - key may not exist on the typed sprites object
+            const v = detail.sprites[k];
+            if (v && typeof v === 'string') collected.push(v);
+          });
+
+          // fallback: if none of the preferred keys exist, use front_default if present
+          if (collected.length === 0 && detail.sprites.front_default) {
+            collected.push(detail.sprites.front_default);
+          }
+
+          const unique = Array.from(new Set(collected));
+          setImages(unique);
+          setCurrentImageIndex(0);
 
         } catch (e) {
           if ((e as Error).name !== 'AbortError') {
@@ -148,9 +173,33 @@ if (error || !pokemon) {
           ))}
         </View>
 
-          {pokemon.sprites.front_default ? 
-          ( <Image source={{ uri: pokemon.sprites.front_default }} style={styles.image} />) :
-            null}
+          {/* Gallery: central image with left/right arrows */}
+          <View style={styles.imageContainer}>
+            <TouchableOpacity
+              onPress={() => setCurrentImageIndex((i) => (i - 1 + images.length) % (images.length || 1))}
+              style={styles.arrowButton}
+              disabled={images.length === 0}
+            >
+              <Text style={styles.arrowText}>&lt;</Text>
+            </TouchableOpacity>
+
+            {images.length > 0 ? (
+              <Image source={{ uri: images[currentImageIndex] }} style={styles.image} />
+            ) : (
+              // fallback para compatibilidade com estrutura anterior
+              pokemon.sprites.front_default ? (
+                <Image source={{ uri: pokemon.sprites.front_default }} style={styles.image} />
+              ) : null
+            )}
+
+            <TouchableOpacity
+              onPress={() => setCurrentImageIndex((i) => (i + 1) % (images.length || 1))}
+              style={styles.arrowButton}
+              disabled={images.length === 0}
+            >
+              <Text style={styles.arrowText}>&gt;</Text>
+            </TouchableOpacity>
+          </View>
       </View>
 
       {/* <View style={styles.section}>
