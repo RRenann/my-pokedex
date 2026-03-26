@@ -7,6 +7,7 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../routes';
 
+
 /**
  * Componente da tela de login.
  * Permite ao usuário inserir email e senha para fazer login na aplicação.

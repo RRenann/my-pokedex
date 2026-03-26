@@ -10,6 +10,7 @@ import { fetchPokemonDetail,
           type PokemonDetailResponse,
           type PokemonSpeciesResponse } from '../../services/pokeapi';
 
+          
 // const MOCK_POKEMON_DETAIL = {
 //   id: 25,
 //   name: 'pikachu',
