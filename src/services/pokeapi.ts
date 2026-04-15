@@ -37,26 +37,10 @@ export async function fetchPokemonList(
 }
 
 export type PokemonListItemUI = {
-  id:number;
+  id: number;
   name: string;
   imageUrl: string;
   types: string[];
-};
-
-
-type pokemonDetailListItemResponse = {
-  id: number;
-  name: string;
-  sprites: {
-    front_default: string | null;
-  };
-  types: {
-    slot: number;
-    type: {
-      name: string;
-      url: string;
-    };
-  }[];
 };
 
 function extractIdPokemon(url: string): number {
@@ -74,27 +58,31 @@ export async function fetchPokemonListPage(
   next: string | null;
 }> {
   const data = await fetchPokemonList(limit, offset, options);
-
-  const details = await Promise.all(
-    data.results.map(async (pokemon) => {
-      const response = await fetch(pokemon.url, { signal: options?.signal });
-      if (!response.ok) {
-        throw new Error(`Falha ao buscar detalhes do Pokémon ${pokemon.name}`);
-      }
-      return (await response.json()) as pokemonDetailListItemResponse;
-    })
+  
+  // Buscar detalhes em paralelo para obter os tipos
+  const detailsPromises = data.results.map((pokemon) =>
+    fetchPokemonDetail(pokemon.name, { signal: options?.signal })
   );
-
-  const items: PokemonListItemUI[] = details.map((detail) => ({
-    id: detail.id,
-    name: detail.name,
-    imageUrl: detail.sprites.front_default ?? `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${detail.id}.png`,
-    types: detail.types.map((t) => t.type.name),
-  }));
-return {
+  
+  const details = await Promise.all(detailsPromises);
+  
+  const items = data.results.map((pokemon, index) => {
+    const id = extractIdPokemon(pokemon.url);
+    const detail = details[index];
+    const types = (detail.types || []).map((t) => t.type.name);
+    
+    return {
+      id,
+      name: pokemon.name,
+      imageUrl: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`,
+      types,
+    };
+  });
+  
+  return {
     items,
     count: data.count,
-    next: data.next
+    next: data.next,
   };
 }
 
