@@ -58,6 +58,12 @@ export const createStyles = (theme: Theme) =>
       height: 160,
       marginTop: 16,
     },
+    capturedImage: {
+      width: '100%',
+      height: 240,
+      borderRadius: 12,
+      backgroundColor: theme.colors.surfaceAlt,
+    },
     imageContainer: {
       width: '100%',
       marginTop: 16,

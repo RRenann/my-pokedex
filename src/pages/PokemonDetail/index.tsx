@@ -2,9 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, Image, ScrollView, ActivityIndicator, TouchableOpacity, Share } from 'react-native';
 import { createStyles } from './styles';
 import { useTheme } from '../../global/themes';
-import { useRoute } from '@react-navigation/native';
+import { useRoute, useNavigation, useFocusEffect } from '@react-navigation/native';
 import { RouteProp } from '@react-navigation/native';
 import { RootStackParamList } from '../../routes';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+
 import {
  fetchPokemonDetail,
  fetchPokemonSpecies,
@@ -12,6 +14,7 @@ import {
  type PokemonSpeciesResponse
 } from '../../services/pokeapi';
 import { isFavorite, toggleFavorite } from '../../services/favoritesStorage';
+import { getCapturedPhotoUri } from '../../services/capturedPhotoSession';
 
 
 const TYPE_COLORS: Record<string, string> = {
@@ -35,7 +38,6 @@ const TYPE_COLORS: Record<string, string> = {
  fairy: '#D685AD',
 };
 
-
 function getTypeColor(type: string) {
  return TYPE_COLORS[type] ?? '#A8A8A8';
 }
@@ -56,6 +58,13 @@ export default function PokemonDetailScreen() {
 
  const [favorite, setFavorite] = useState(false);
  const [favoriteLoading, setFavoriteLoading] = useState(true);
+ const [capturedPhotoUri, setCapturedPhotoUri] = useState<string | null>(null);
+
+const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList, 'PokemonDetail'>>();
+
+function handleOpenCamera() {
+  navigation.navigate('PokemonCamera', { id });
+}
 
 
  function getPokemonDescriptionFromSpecies(
@@ -162,6 +171,12 @@ async function handleSharePokemon() {
    return () => { controller.abort(); };
  }, [id]);
 
+ useFocusEffect(
+   React.useCallback(() => {
+     setCapturedPhotoUri(getCapturedPhotoUri(id));
+   }, [id]),
+ );
+
 
  if (isLoading) {
    return (
@@ -222,6 +237,32 @@ async function handleSharePokemon() {
          (<Image source={{ uri: pokemon.sprites.front_default }} style={styles.image} />) :
          null}
      </View>
+
+       {capturedPhotoUri ? (
+         <View style={styles.section}>
+           <Text style={styles.sectionTitle}>Foto capturada</Text>
+           <Image
+             source={{ uri: capturedPhotoUri }}
+             style={styles.capturedImage}
+             resizeMode="cover"
+           />
+         </View>
+       ) : null}
+     
+     <TouchableOpacity
+  onPress={handleOpenCamera}
+  style={{
+    backgroundColor: '#16a34a',
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    borderRadius: 999,
+    alignSelf: 'flex-start',
+    marginBottom: 16,
+  }}
+>
+  <Text style={{ fontWeight: '700', color: '#fff' }}>Abrir câmera</Text>
+</TouchableOpacity>
+
     
      <TouchableOpacity
        onPress={handleToggleFavorite}
