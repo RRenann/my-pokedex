@@ -15,6 +15,7 @@ import {
 } from '../../services/pokeapi';
 import { isFavorite, toggleFavorite } from '../../services/favoritesStorage';
 import { getCapturedPhotoUri } from '../../services/capturedPhotoSession';
+import { notifyPokemonFavorited } from '../../services/localNotifications';
 
 
 const TYPE_COLORS: Record<string, string> = {
@@ -97,6 +98,10 @@ function handleOpenCamera() {
      types: (pokemon.types || []).map((t) => t.type.name),
    };
    const updated = await toggleFavorite(summary);
+   const isNowFavorite = updated.some((item) => item.id === pokemon.id);
+   if (isNowFavorite) {
+     notifyPokemonFavorited(pokemon.name);
+   }
    setFavorite(updated.some((item) => item.id === pokemon.id));
  }
 

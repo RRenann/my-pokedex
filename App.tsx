@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { View, StyleSheet } from 'react-native';
 import LoginScreen from './src/pages/Login';
@@ -6,6 +6,11 @@ import PokemonListScreen from './src/pages/PokemonList';
 import PokemonDetailScreen from './src/pages/PokemonDetail';
 import AppNavigator from './src/routes';
 import { NavigationContainer } from '@react-navigation/native';
+import {
+  setupNotificationHandler,
+  configureAndroidChannel,
+  requestNotificationPermission,
+} from './src/services/localNotifications';
 
 /**
  * Componente principal da aplicação.
@@ -13,6 +18,17 @@ import { NavigationContainer } from '@react-navigation/native';
  * Por que é usada: Para inicializar e renderizar a estrutura base da aplicação React Native.
  */
 export default function App() {
+  useEffect(() => {
+    setupNotificationHandler();
+    
+
+    (async () => {
+      configureAndroidChannel();
+       requestNotificationPermission();
+    })();
+
+  }, []);
+
   return (
     <NavigationContainer>
       <StatusBar style="dark" />
